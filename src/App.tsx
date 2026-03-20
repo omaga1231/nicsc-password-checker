@@ -357,12 +357,12 @@ export default function App() {
 
           {/* Info Card */}
           <div className="rounded-xl border border-card-border bg-card p-6 shadow-sm">
-            <h2 className="text-sm font-semibold mb-3">Quick Tips for Stronger Passwords</h2>
+            <h2 className="text-sm font-semibold mb-3">🔐 Quick Tips for Stronger Passwords</h2>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span> Use a <strong className="text-foreground">passphrase</strong> — a random string of 4+ words is hard to crack and easy to remember.</p>
-              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span> Mix in <strong className="text-foreground">numbers and symbols</strong> — but not in obvious spots like replacing "a" with "@".</p>
-              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span> <strong className="text-foreground">Never reuse</strong> passwords — one breach can expose every account you have.</p>
-              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span> Use a <strong className="text-foreground">password manager</strong> to generate and store unique passwords for each site.</p>
+              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span><span><strong className="text-foreground">Use a passphrase</strong><br />A random combination of 4+ words (e.g., "sunset-coffee-lion-bridge") is both secure and easy to remember.</span></p>
+              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span><span><strong className="text-foreground">Add numbers &amp; symbols strategically</strong><br />Avoid predictable swaps like "@" for "a" — attackers expect those.</span></p>
+              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span><span><strong className="text-foreground">Never reuse passwords</strong><br />One leaked password can compromise all your accounts.</span></p>
+              <p className="flex items-start gap-2"><span className="text-amber-700 mt-0.5 font-bold">→</span><span><strong className="text-foreground">Use a password manager</strong><br />Tools can generate and store strong, unique passwords for every site.</span></p>
             </div>
             <div className="mt-4 pt-4 border-t border-border grid grid-cols-3 gap-4 text-center">
               <div>
