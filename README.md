@@ -1,82 +1,100 @@
-# NICSC Password Strength Checker
+# NICS Password Strength Checker
 
-**Network Information Computer Science Club — Cybersecurity Challenge**
-
-An interactive, fully offline password strength checker built for the NICSC club event. Test how long it would take a hacker to crack your password and pick up quick, practical tips to secure your accounts.
-
----
+Interactive password-strength checker and generator for the NICS cybersecurity challenge.
 
 ## Features
 
-- **Real-time strength analysis** — scores passwords from Very Weak to Very Strong as you type
-- **Pattern analysis** — breaks down exactly which parts of your password are predictable (dictionary words, sequences, keyboard patterns, etc.)
-- **Password generator** — cryptographically secure random passwords with configurable length and character sets
-- **Actionable tips** — practical advice on building stronger passwords
-- **Fully offline** — zero network requests; everything runs in your browser
-
----
+- Real-time password scoring (Very Weak -> Very Strong) using `zxcvbn`
+- Estimated crack time display (offline slow hashing scenario)
+- Pattern analysis (dictionary words, sequences, brute-force segments, etc.)
+- Password generator with configurable length and character sets
+- Copy-to-clipboard and dark mode support
+- Quick security tips section with practical guidance
 
 ## How It Works
 
-Password analysis is powered by **[zxcvbn](https://github.com/dropbox/zxcvbn)**, an open-source estimator by Dropbox. It evaluates passwords the same way real attackers do — through dictionary lookups, pattern matching, and entropy calculations — rather than simple rules like "must contain a number."
+- Password analysis is powered by [zxcvbn](https://github.com/dropbox/zxcvbn)
+- Crack time uses `zxcvbn` crack-time estimates
+- Password generation uses the browser Web Crypto API (`crypto.getRandomValues`)
 
-Password generation uses the browser's built-in **Web Crypto API** (`crypto.getRandomValues`), which is cryptographically secure and requires no external library.
+## Tech Stack
 
----
+- React + Vite + TypeScript
+- Tailwind CSS v4
+- Lucide React icons
+- zxcvbn
 
-## Stack
+## Local Development
 
-- [React](https://react.dev/) + [Vite](https://vitejs.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [zxcvbn](https://github.com/dropbox/zxcvbn) — password strength estimation
-- [Lucide React](https://lucide.dev/) — icons
-
----
-
-## Getting Started
+Using npm:
 
 ```bash
-# Install dependencies
-pnpm install
-
-# Start dev server
-pnpm --filter @workspace/password-checker run dev
+npm install
+npm run dev
 ```
 
-The app will be available at `http://localhost:<PORT>`.
+Using pnpm:
 
----
+```bash
+pnpm install
+pnpm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+Build output directory: `dist`
+
+Preview production build:
+
+```bash
+npm run preview
+```
+
+## Vercel Deployment
+
+This project is configured for Vercel via `vercel.json`:
+
+- Framework: `vite`
+- Build command: `npm run build`
+- Output directory: `dist`
+- SPA rewrite to `index.html` for client-side routing
+
+Deploy from GitHub:
+
+1. Push your latest changes to `main`
+2. Import the repo in Vercel
+3. Keep defaults (or use existing `vercel.json`)
+4. Deploy
+
+## Scripts
+
+- `dev` -> `vite`
+- `build` -> `vite build`
+- `preview` -> `vite preview`
+- `typecheck` -> `tsc -p tsconfig.json --noEmit`
 
 ## Project Structure
 
-```
-artifacts/password-checker/
+```text
+.
 ├── public/
-│   └── nicsc-logo.png       # Club logo
+│   └── nicsc-logo.png
 ├── src/
-│   ├── App.tsx              # Main application component
-│   ├── index.css            # Global styles and theme variables
-│   └── components/ui/       # Shared UI components
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── index.css
+│   └── components/ui/
 ├── index.html
 ├── package.json
-└── vite.config.ts
+├── tsconfig.json
+├── vite.config.ts
+└── vercel.json
 ```
-
----
-
-## Color Scheme
-
-The app uses the NICSC club's official colors:
-
-| Role       | Value                  |
-|------------|------------------------|
-| Background | White `#ffffff`        |
-| Text       | Near-black `#141414`   |
-| Accent     | Gold `hsl(38, 85%, 42%)` |
-
----
 
 ## License
 
-MIT — free to use, modify, and distribute.
+MIT
