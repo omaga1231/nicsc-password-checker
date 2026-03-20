@@ -65,8 +65,14 @@ function formatTime(seconds: number): string {
   return "centuries";
 }
 
-function formatCrackTime(crackTimeDisplay: string): string {
-  return crackTimeDisplay;
+function formatCrackTime(crackTimeDisplay: string | number): string {
+  const normalized = String(crackTimeDisplay ?? "");
+
+  if (!normalized || normalized === "less than a second") {
+    return "< 1 second";
+  }
+
+  return normalized;
 }
 
 const CHAR_SETS = {
@@ -224,6 +230,19 @@ export default function App() {
                     }`}
                   />
                 ))}
+              </div>
+
+              {/* Crack time */}
+              <div className="rounded-lg bg-background/60 p-4 mb-4">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+                  Estimated Time to Crack
+                </p>
+                <p className={`text-lg font-semibold ${config.textColor}`}>
+                  {formatCrackTime(result.crack_times_display.offline_slow_hashing_1e4_per_second)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Based on offline attack at ~10k guesses/sec
+                </p>
               </div>
 
               {/* Feedback */}
