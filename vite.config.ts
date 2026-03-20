@@ -2,46 +2,22 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-const rawPort = process.env.PORT;
-
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
-
+// Local defaults so the app can run outside Replit.
+const rawPort = process.env.PORT ?? "5173";
 const port = Number(rawPort);
 
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
+const safePort = Number.isNaN(port) || port <= 0 ? 5173 : port;
 
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
-}
+let basePath = process.env.BASE_PATH ?? "/";
+// Vite expects base to start with a slash (except empty string).
+if (basePath !== "/" && !basePath.startsWith("/")) basePath = `/${basePath}`;
 
 export default defineConfig({
   base: basePath,
   plugins: [
     react(),
     tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer({
-              root: path.resolve(import.meta.dirname, ".."),
-            }),
-          ),
-        ]
-      : []),
   ],
   resolve: {
     alias: {
@@ -56,7 +32,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port,
+    port: safePort,
     host: "0.0.0.0",
     allowedHosts: true,
     fs: {
@@ -65,7 +41,7 @@ export default defineConfig({
     },
   },
   preview: {
-    port,
+    port: safePort,
     host: "0.0.0.0",
     allowedHosts: true,
   },

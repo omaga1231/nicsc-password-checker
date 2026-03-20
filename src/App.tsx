@@ -248,7 +248,7 @@ export default function App() {
                 <div className="mt-4">
                   <p className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">Pattern Analysis</p>
                   <div className="flex flex-wrap gap-2">
-                    {result.sequence.map((match: Record<string, unknown>, i: number) => (
+                    {result.sequence.map((match, i: number) => (
                       <span
                         key={i}
                         className="inline-flex items-center px-2.5 py-1 rounded-md bg-background/70 border border-border text-xs"
