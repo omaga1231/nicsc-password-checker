@@ -145,12 +145,12 @@ export default function App() {
             <div className="flex items-center gap-2.5">
               <img
                 src="/nicsc-logo.png"
-                alt="nics Logo"
+                alt="NICS Logo"
                 className="h-10 w-auto"
               />
               <div>
                 <h1 className="text-base font-semibold leading-tight text-amber-700 electric-glow electric-flicker">Can You Crack It?</h1>
-                <p className="text-xs text-muted-foreground">nics Cybersecurity Challenge</p>
+                <p className="text-xs text-muted-foreground">NICS Cybersecurity Challenge</p>
               </div>
             </div>
             <button
