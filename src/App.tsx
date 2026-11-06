@@ -82,27 +82,44 @@ const CHAR_SETS = {
   symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
 };
 
+// Use Web Crypto for every random choice. Rejection sampling avoids modulo bias.
+function secureRandomInt(maxExclusive: number): number {
+  const range = 2 ** 32;
+  const limit = range - (range % maxExclusive);
+  const sample = new Uint32Array(1);
+
+  do {
+    crypto.getRandomValues(sample);
+  } while (sample[0] >= limit);
+
+  return sample[0] % maxExclusive;
+}
+
 function generatePassword(length: number, opts: { upper: boolean; lower: boolean; digits: boolean; symbols: boolean }): string {
-  let charset = "";
-  const required: string[] = [];
+  const groups = [
+    opts.upper ? CHAR_SETS.uppercase : "",
+    opts.lower ? CHAR_SETS.lowercase : "",
+    opts.digits ? CHAR_SETS.digits : "",
+    opts.symbols ? CHAR_SETS.symbols : "",
+  ].filter(Boolean);
 
-  if (opts.upper) { charset += CHAR_SETS.uppercase; required.push(CHAR_SETS.uppercase[Math.floor(Math.random() * CHAR_SETS.uppercase.length)]); }
-  if (opts.lower) { charset += CHAR_SETS.lowercase; required.push(CHAR_SETS.lowercase[Math.floor(Math.random() * CHAR_SETS.lowercase.length)]); }
-  if (opts.digits) { charset += CHAR_SETS.digits; required.push(CHAR_SETS.digits[Math.floor(Math.random() * CHAR_SETS.digits.length)]); }
-  if (opts.symbols) { charset += CHAR_SETS.symbols; required.push(CHAR_SETS.symbols[Math.floor(Math.random() * CHAR_SETS.symbols.length)]); }
+  if (groups.length === 0) return "";
+  if (length < groups.length) throw new RangeError("Password length is shorter than the selected character groups");
 
-  if (!charset) charset = CHAR_SETS.lowercase;
+  const charset = groups.join("");
+  const characters = groups.map((group) => group[secureRandomInt(group.length)]);
 
-  const arr = new Uint32Array(length);
-  crypto.getRandomValues(arr);
-  let password = Array.from(arr).map((n) => charset[n % charset.length]).join("");
-
-  for (let i = 0; i < required.length && i < length; i++) {
-    const pos = Math.floor(Math.random() * length);
-    password = password.slice(0, pos) + required[i] + password.slice(pos + 1);
+  while (characters.length < length) {
+    characters.push(charset[secureRandomInt(charset.length)]);
   }
 
-  return password;
+  // Fisher-Yates shuffle keeps required character groups while randomizing positions.
+  for (let i = characters.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [characters[i], characters[j]] = [characters[j], characters[i]];
+  }
+
+  return characters.join("");
 }
 
 export default function App() {
@@ -348,7 +365,8 @@ export default function App() {
 
             <button
               onClick={handleGenerate}
-              className="w-full h-10 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 active:opacity-80 transition-opacity flex items-center justify-center gap-2 electric-glow-sm"
+              disabled={!Object.values(genOpts).some(Boolean)}
+              className="w-full h-10 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 active:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity flex items-center justify-center gap-2 electric-glow-sm"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Generate Password
